@@ -2,32 +2,31 @@ import { Injectable } from '@nestjs/common';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { InjectModel } from '@nestjs/mongoose';
-
+import { Student } from './schema/student.schema';
+import { Model } from 'mongoose';
 @Injectable()
 export class StudentsService {
-  constructor{
-    @InjectModel(Student.name) private studentModel: Model<Student>,
-  }
-
-
-
+  constructor(
+    @InjectModel(Student.name) private studentModel: Model<Student>
+  ){}
   create(createStudentDto: CreateStudentDto) {
-    return 'This action adds a new student';
+    const createdStudent = new this.studentModel(createStudentDto);
+    return createdStudent.save();
   }
 
   findAll() {
-    return `This action returns all students`;
+    return this.studentModel.find().exec();
   }
 
   findOne(id: string) {
-    return `This action returns a #${id} student`;
+    return this.studentModel.findById(id).exec();
   }
 
   update(id: string, updateStudentDto: UpdateStudentDto) {
-    return `This action updates a #${id} student`;
+    return this.studentModel.findByIdAndUpdate(id, updateStudentDto, {new:true}).exec();
   }
 
   remove(id: string) {
-    return `This action removes a #${id} student`;
+    return this.studentModel.findByIdAndDelete(id).exec();
   }
 }

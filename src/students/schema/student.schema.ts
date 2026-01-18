@@ -4,16 +4,16 @@ import { HydratedDocument } from "mongoose";
 export type StudentSchema = HydratedDocument<Student>;
 
 
-Schema()
+@Schema()
 
 export class Student {
-    @Prop()
+    @Prop({required: true})
     name: string;
 
-    @Prop()
+    @Prop({required: true})
     age: number;
 
-    @Prop()
+    @Prop({required: false})
     country: string;
 }
 
